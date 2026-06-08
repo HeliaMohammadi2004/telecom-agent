@@ -1,0 +1,1083 @@
+[
+  {
+    "id": "sim_001",
+    "name": "retrieve_sim_pin",
+    "category": "SIM Card",
+    "description": "Help customer retrieve or reset their SIM card PIN code",
+    "keywords": ["pin", "sim", "کد", "پین", "سیم کارت", "بازیابی", "فراموش"],
+    "steps": [
+      "Ask for national ID and phone number",
+      "Verify customer identity via OTP to registered email",
+      "Provide PUK code if PIN is blocked",
+      "Guide through PIN reset process"
+    ],
+    "estimated_time": "5 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "sim_002",
+    "name": "sim_replacement",
+    "category": "SIM Card",
+    "description": "Request a replacement SIM card for lost, damaged, or stolen SIM",
+    "keywords": ["replacement", "lost sim", "broken", "گم", "خراب", "تعویض سیم"],
+    "steps": [
+      "Verify ownership via national ID",
+      "Check account status",
+      "Suspend current SIM if requested",
+      "Order replacement SIM",
+      "Confirm delivery address"
+    ],
+    "estimated_time": "10 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "sim_003",
+    "name": "sim_activation",
+    "category": "SIM Card",
+    "description": "Activate a new SIM card",
+    "keywords": ["activate", "new sim", "activation", "فعال سازی", "سیم جدید"],
+    "steps": [
+      "Enter SIM ICCID number",
+      "Confirm customer information",
+      "Activate the SIM on network"
+    ],
+    "estimated_time": "3 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "sim_004",
+    "name": "sim_lock_unlock",
+    "category": "SIM Card",
+    "description": "Lock or unlock a SIM card",
+    "keywords": ["lock", "unlock", "block", "قفل", "مسدود", "باز"],
+    "steps": [
+      "Verify identity",
+      "Select lock or unlock action",
+      "Apply change immediately"
+    ],
+    "estimated_time": "3 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "sim_005",
+    "name": "sim_puk_unlock",
+    "category": "SIM Card",
+    "description": "Provide PUK code to unlock a blocked SIM",
+    "keywords": ["puk", "blocked", "مسدود", "پاک", "باز کردن قفل"],
+    "steps": [
+      "Verify customer identity",
+      "Retrieve PUK code from system",
+      "Guide customer through PUK entry"
+    ],
+    "estimated_time": "5 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "balance_001",
+    "name": "check_balance",
+    "category": "Account & Balance",
+    "description": "Check current account balance and credit",
+    "keywords": ["balance", "credit", "موجودی", "اعتبار", "شارژ"],
+    "steps": [
+      "Retrieve account balance",
+      "Display remaining credit",
+      "Show expiry date"
+    ],
+    "estimated_time": "1 minute",
+    "requires_verification": false
+  },
+  {
+    "id": "balance_002",
+    "name": "recharge_account",
+    "category": "Account & Balance",
+    "description": "Recharge or top-up account balance",
+    "keywords": ["recharge", "top up", "شارژ", "افزایش اعتبار", "خرید شارژ"],
+    "steps": [
+      "Select recharge amount",
+      "Choose payment method",
+      "Process payment",
+      "Confirm recharge"
+    ],
+    "estimated_time": "3 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "balance_003",
+    "name": "transfer_credit",
+    "category": "Account & Balance",
+    "description": "Transfer credit from one account to another",
+    "keywords": ["transfer", "انتقال", "هدیه", "gift", "credit transfer"],
+    "steps": [
+      "Enter recipient phone number",
+      "Enter amount to transfer",
+      "Confirm transfer"
+    ],
+    "estimated_time": "3 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "balance_004",
+    "name": "auto_recharge_setup",
+    "category": "Account & Balance",
+    "description": "Set up automatic recharge when balance falls below threshold",
+    "keywords": ["auto recharge", "automatic", "خودکار", "اتوماتیک", "شارژ خودکار"],
+    "steps": [
+      "Set minimum balance threshold",
+      "Set recharge amount",
+      "Link payment method",
+      "Enable auto-recharge"
+    ],
+    "estimated_time": "5 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "plan_001",
+    "name": "check_current_plan",
+    "category": "Plans & Packages",
+    "description": "Check current subscription plan and its details",
+    "keywords": ["plan", "package", "طرح", "بسته", "اشتراک", "سرویس"],
+    "steps": [
+      "Retrieve active plan details",
+      "Display inclusions (calls, data, SMS)",
+      "Show renewal date"
+    ],
+    "estimated_time": "1 minute",
+    "requires_verification": false
+  },
+  {
+    "id": "plan_002",
+    "name": "upgrade_plan",
+    "category": "Plans & Packages",
+    "description": "Upgrade to a higher tier plan",
+    "keywords": ["upgrade", "ارتقا", "بهتر", "بیشتر", "تغییر طرح"],
+    "steps": [
+      "Show available upgrade options",
+      "Compare current vs new plan",
+      "Confirm upgrade",
+      "Process immediately or on renewal"
+    ],
+    "estimated_time": "5 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "plan_003",
+    "name": "downgrade_plan",
+    "category": "Plans & Packages",
+    "description": "Downgrade to a lower tier plan",
+    "keywords": ["downgrade", "تنزیل", "ارزان تر", "کمتر"],
+    "steps": [
+      "Show available downgrade options",
+      "Warn about feature loss",
+      "Confirm downgrade",
+      "Schedule for next billing cycle"
+    ],
+    "estimated_time": "5 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "plan_004",
+    "name": "add_data_bundle",
+    "category": "Plans & Packages",
+    "description": "Add extra data bundle to current plan",
+    "keywords": ["data bundle", "internet", "اینترنت", "دیتا", "بسته اینترنت", "گیگ"],
+    "steps": [
+      "Show available data bundles",
+      "Select bundle",
+      "Confirm purchase",
+      "Activate immediately"
+    ],
+    "estimated_time": "3 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "plan_005",
+    "name": "add_call_bundle",
+    "category": "Plans & Packages",
+    "description": "Add extra call minutes bundle",
+    "keywords": ["call bundle", "minutes", "دقیقه", "مکالمه", "تماس"],
+    "steps": [
+      "Show available call bundles",
+      "Select bundle",
+      "Confirm and activate"
+    ],
+    "estimated_time": "3 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "plan_006",
+    "name": "add_sms_bundle",
+    "category": "Plans & Packages",
+    "description": "Add extra SMS bundle",
+    "keywords": ["sms", "text", "پیامک", "SMS بسته"],
+    "steps": [
+      "Show available SMS bundles",
+      "Select and purchase"
+    ],
+    "estimated_time": "2 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "plan_007",
+    "name": "roaming_activation",
+    "category": "Plans & Packages",
+    "description": "Activate international roaming service",
+    "keywords": ["roaming", "international", "رومینگ", "بین الملل", "خارج"],
+    "steps": [
+      "Check eligibility",
+      "Select roaming package",
+      "Activate service",
+      "Provide usage tips"
+    ],
+    "estimated_time": "5 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "plan_008",
+    "name": "roaming_deactivation",
+    "category": "Plans & Packages",
+    "description": "Deactivate international roaming service",
+    "keywords": ["disable roaming", "غیرفعال رومینگ"],
+    "steps": ["Verify account", "Disable roaming immediately"],
+    "estimated_time": "2 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "data_001",
+    "name": "check_data_usage",
+    "category": "Data & Internet",
+    "description": "Check current data usage and remaining quota",
+    "keywords": ["data usage", "internet usage", "مصرف اینترنت", "باقیمانده دیتا"],
+    "steps": [
+      "Retrieve current billing period",
+      "Show data used vs total",
+      "Display daily breakdown if requested"
+    ],
+    "estimated_time": "1 minute",
+    "requires_verification": false
+  },
+  {
+    "id": "data_002",
+    "name": "enable_data_roaming",
+    "category": "Data & Internet",
+    "description": "Enable data usage while roaming internationally",
+    "keywords": ["data roaming", "international data", "اینترنت خارج", "دیتا رومینگ"],
+    "steps": [
+      "Confirm international location",
+      "Enable data roaming",
+      "Set spending limit"
+    ],
+    "estimated_time": "3 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "data_003",
+    "name": "set_data_limit",
+    "category": "Data & Internet",
+    "description": "Set a daily or monthly data usage limit",
+    "keywords": ["data limit", "cap", "سقف مصرف", "محدودیت اینترنت"],
+    "steps": [
+      "Select limit type (daily/monthly)",
+      "Enter limit amount",
+      "Choose action when limit reached (throttle/block)"
+    ],
+    "estimated_time": "3 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "data_004",
+    "name": "configure_apn",
+    "category": "Data & Internet",
+    "description": "Configure APN settings for data connectivity",
+    "keywords": ["apn", "internet settings", "تنظیمات اینترنت", "APN"],
+    "steps": [
+      "Detect device type",
+      "Send APN settings via SMS",
+      "Guide manual configuration if needed"
+    ],
+    "estimated_time": "5 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "data_005",
+    "name": "wifi_calling_setup",
+    "category": "Data & Internet",
+    "description": "Enable and configure WiFi calling",
+    "keywords": ["wifi calling", "voip", "تماس از WiFi"],
+    "steps": [
+      "Check device compatibility",
+      "Enable WiFi calling on account",
+      "Guide device settings"
+    ],
+    "estimated_time": "5 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "bill_001",
+    "name": "check_bill",
+    "category": "Billing & Invoices",
+    "description": "View current or past bills and invoices",
+    "keywords": ["bill", "invoice", "صورت حساب", "فاکتور", "قبض"],
+    "steps": [
+      "Select billing period",
+      "Retrieve and display bill",
+      "Offer to send by email"
+    ],
+    "estimated_time": "2 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "bill_002",
+    "name": "pay_bill",
+    "category": "Billing & Invoices",
+    "description": "Pay outstanding bill",
+    "keywords": ["pay", "payment", "پرداخت", "تسویه", "قبض پرداخت"],
+    "steps": [
+      "Show outstanding amount",
+      "Select payment method",
+      "Process payment",
+      "Send receipt"
+    ],
+    "estimated_time": "5 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "bill_003",
+    "name": "setup_autopay",
+    "category": "Billing & Invoices",
+    "description": "Set up automatic bill payment",
+    "keywords": ["autopay", "automatic payment", "پرداخت خودکار"],
+    "steps": [
+      "Add payment method",
+      "Set payment date",
+      "Enable autopay",
+      "Confirm setup"
+    ],
+    "estimated_time": "5 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "bill_004",
+    "name": "billing_dispute",
+    "category": "Billing & Invoices",
+    "description": "Dispute an incorrect charge on the bill",
+    "keywords": ["dispute", "incorrect charge", "اعتراض", "اشتباه", "مغایرت"],
+    "steps": [
+      "Identify disputed charge",
+      "Document dispute details",
+      "Submit dispute ticket",
+      "Provide case number"
+    ],
+    "estimated_time": "10 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "bill_005",
+    "name": "payment_extension",
+    "category": "Billing & Invoices",
+    "description": "Request extension for bill payment deadline",
+    "keywords": ["extension", "deadline", "تمدید", "مهلت پرداخت"],
+    "steps": [
+      "Check eligibility for extension",
+      "Grant extension if eligible",
+      "Update due date"
+    ],
+    "estimated_time": "5 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "number_001",
+    "name": "number_portability",
+    "category": "Number Management",
+    "description": "Port phone number from another carrier",
+    "keywords": ["port", "transfer number", "انتقال شماره", "همراه اول", "ایرانسل"],
+    "steps": [
+      "Verify number ownership at old carrier",
+      "Check number eligibility",
+      "Initiate porting request",
+      "Provide timeline (1-3 business days)"
+    ],
+    "estimated_time": "15 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "number_002",
+    "name": "change_number",
+    "category": "Number Management",
+    "description": "Request a new phone number",
+    "keywords": ["change number", "new number", "تغییر شماره", "شماره جدید"],
+    "steps": [
+      "Explain implications",
+      "Let customer select from available numbers",
+      "Process change",
+      "Update all services"
+    ],
+    "estimated_time": "10 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "number_003",
+    "name": "caller_id_setup",
+    "category": "Number Management",
+    "description": "Configure caller ID settings (show/hide number)",
+    "keywords": ["caller id", "clir", "شناسه تماس", "نمایش شماره"],
+    "steps": [
+      "Current caller ID status",
+      "Toggle show/hide",
+      "Confirm change"
+    ],
+    "estimated_time": "2 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "number_004",
+    "name": "vanity_number_request",
+    "category": "Number Management",
+    "description": "Request a specific or memorable phone number",
+    "keywords": ["vanity number", "special number", "شماره خاص", "شماره رند"],
+    "steps": [
+      "Check availability of requested number",
+      "Show pricing if applicable",
+      "Process reservation"
+    ],
+    "estimated_time": "10 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "call_001",
+    "name": "call_forwarding_setup",
+    "category": "Call Services",
+    "description": "Set up call forwarding to another number",
+    "keywords": ["call forwarding", "forward", "انتقال تماس", "فوروارد"],
+    "steps": [
+      "Select forwarding condition (always/busy/no answer)",
+      "Enter destination number",
+      "Activate forwarding"
+    ],
+    "estimated_time": "3 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "call_002",
+    "name": "call_waiting_toggle",
+    "category": "Call Services",
+    "description": "Enable or disable call waiting feature",
+    "keywords": ["call waiting", "انتظار تماس"],
+    "steps": ["Toggle call waiting on/off", "Confirm change"],
+    "estimated_time": "1 minute",
+    "requires_verification": false
+  },
+  {
+    "id": "call_003",
+    "name": "voicemail_setup",
+    "category": "Call Services",
+    "description": "Set up or configure voicemail",
+    "keywords": ["voicemail", "پیغام گیر", "صندوق پستی"],
+    "steps": [
+      "Activate voicemail service",
+      "Set greeting message",
+      "Configure notification settings"
+    ],
+    "estimated_time": "5 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "call_004",
+    "name": "call_barring",
+    "category": "Call Services",
+    "description": "Block specific types of calls (international, premium)",
+    "keywords": ["call barring", "block calls", "مسدود تماس", "قطع تماس"],
+    "steps": [
+      "Select barring type",
+      "Enter barring PIN",
+      "Apply barring"
+    ],
+    "estimated_time": "3 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "call_005",
+    "name": "conference_call_setup",
+    "category": "Call Services",
+    "description": "Enable or guide conference calling feature",
+    "keywords": ["conference call", "3-way", "چند نفره", "کنفرانس"],
+    "steps": [
+      "Explain conference call process",
+      "Enable if not active",
+      "Guide customer on usage"
+    ],
+    "estimated_time": "3 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "call_006",
+    "name": "block_number",
+    "category": "Call Services",
+    "description": "Block specific phone numbers from calling",
+    "keywords": ["block number", "spam", "مسدود", "بلاک", "مزاحم"],
+    "steps": [
+      "Enter number to block",
+      "Confirm block",
+      "Add to blocklist"
+    ],
+    "estimated_time": "2 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "sms_001",
+    "name": "sms_blocking",
+    "category": "SMS Services",
+    "description": "Block spam or unwanted SMS messages",
+    "keywords": ["block sms", "spam sms", "مسدود پیامک", "اسپم"],
+    "steps": [
+      "Enter number or keyword to block",
+      "Apply SMS filter"
+    ],
+    "estimated_time": "2 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "sms_002",
+    "name": "bulk_sms_service",
+    "category": "SMS Services",
+    "description": "Set up bulk SMS service for businesses",
+    "keywords": ["bulk sms", "business sms", "پیامک انبوه"],
+    "steps": [
+      "Verify business account",
+      "Configure sender ID",
+      "Set up API access"
+    ],
+    "estimated_time": "20 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "account_001",
+    "name": "update_personal_info",
+    "category": "Account Management",
+    "description": "Update personal information like email, address, name",
+    "keywords": ["update info", "change email", "تغییر اطلاعات", "ویرایش پروفایل"],
+    "steps": [
+      "Verify identity",
+      "Select field to update",
+      "Enter new information",
+      "Confirm change"
+    ],
+    "estimated_time": "5 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "account_002",
+    "name": "reset_account_password",
+    "category": "Account Management",
+    "description": "Reset online account password",
+    "keywords": ["reset password", "forgot password", "رمز عبور", "فراموشی رمز"],
+    "steps": [
+      "Verify via phone or email OTP",
+      "Set new password",
+      "Confirm and update"
+    ],
+    "estimated_time": "5 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "account_003",
+    "name": "account_suspension",
+    "category": "Account Management",
+    "description": "Temporarily suspend account (travel, loss, etc.)",
+    "keywords": ["suspend", "pause", "تعلیق", "مکث حساب"],
+    "steps": [
+      "Verify identity",
+      "Select suspension duration",
+      "Apply suspension",
+      "Confirm reactivation date"
+    ],
+    "estimated_time": "5 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "account_004",
+    "name": "account_reactivation",
+    "category": "Account Management",
+    "description": "Reactivate a suspended account",
+    "keywords": ["reactivate", "resume", "فعال سازی مجدد", "از سرگیری"],
+    "steps": [
+      "Verify identity",
+      "Check suspension reason resolved",
+      "Reactivate account"
+    ],
+    "estimated_time": "5 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "account_005",
+    "name": "account_cancellation",
+    "category": "Account Management",
+    "description": "Cancel/terminate account",
+    "keywords": ["cancel", "terminate", "close account", "لغو", "بستن حساب"],
+    "steps": [
+      "Verify identity",
+      "Attempt to retain customer",
+      "Process cancellation if confirmed",
+      "Final bill information"
+    ],
+    "estimated_time": "10 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "account_006",
+    "name": "family_plan_management",
+    "category": "Account Management",
+    "description": "Add or remove lines from family plan",
+    "keywords": ["family plan", "add line", "طرح خانوادگی", "اضافه کردن خط"],
+    "steps": [
+      "View current family plan",
+      "Select add/remove action",
+      "Process change",
+      "Update billing"
+    ],
+    "estimated_time": "10 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "account_007",
+    "name": "change_ownership",
+    "category": "Account Management",
+    "description": "Transfer account ownership to another person",
+    "keywords": ["transfer ownership", "change owner", "انتقال مالکیت"],
+    "steps": [
+      "Verify current owner",
+      "Collect new owner information",
+      "Both parties must consent",
+      "Process transfer"
+    ],
+    "estimated_time": "20 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "tech_001",
+    "name": "network_troubleshoot",
+    "category": "Technical Support",
+    "description": "Troubleshoot network connectivity issues",
+    "keywords": ["no signal", "network issue", "عدم دریافت سیگنال", "مشکل شبکه"],
+    "steps": [
+      "Check for outages in area",
+      "Basic device troubleshooting",
+      "Check account status",
+      "Escalate to technical team if needed"
+    ],
+    "estimated_time": "10 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "tech_002",
+    "name": "device_unlock",
+    "category": "Technical Support",
+    "description": "Unlock device from carrier lock",
+    "keywords": ["unlock device", "carrier lock", "آزادسازی گوشی", "آنلاک"],
+    "steps": [
+      "Verify account standing",
+      "Check device eligibility",
+      "Provide unlock code or process remotely"
+    ],
+    "estimated_time": "10 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "tech_003",
+    "name": "device_compatibility_check",
+    "category": "Technical Support",
+    "description": "Check if a device is compatible with the network",
+    "keywords": ["compatible", "device check", "سازگاری دستگاه", "گوشی"],
+    "steps": [
+      "Get device IMEI or model",
+      "Check compatibility database",
+      "Report supported bands"
+    ],
+    "estimated_time": "3 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "tech_004",
+    "name": "5g_setup",
+    "category": "Technical Support",
+    "description": "Enable and configure 5G connectivity",
+    "keywords": ["5g", "5G setup", "پنج جی", "نسل پنجم"],
+    "steps": [
+      "Check 5G availability in area",
+      "Verify device compatibility",
+      "Enable 5G on account",
+      "Guide device settings"
+    ],
+    "estimated_time": "5 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "tech_005",
+    "name": "network_speed_test_guide",
+    "category": "Technical Support",
+    "description": "Guide customer through network speed test",
+    "keywords": ["speed test", "slow internet", "سرعت اینترنت", "کندی"],
+    "steps": [
+      "Guide to speed test tool",
+      "Interpret results",
+      "Recommend solutions"
+    ],
+    "estimated_time": "5 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "security_001",
+    "name": "fraud_report",
+    "category": "Security",
+    "description": "Report suspected fraud or unauthorized use",
+    "keywords": ["fraud", "unauthorized", "کلاهبرداری", "استفاده غیرمجاز"],
+    "steps": [
+      "Collect incident details",
+      "Temporarily secure account",
+      "Create fraud report ticket",
+      "Advise next steps"
+    ],
+    "estimated_time": "15 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "security_002",
+    "name": "two_factor_auth_setup",
+    "category": "Security",
+    "description": "Enable two-factor authentication on account",
+    "keywords": ["2fa", "two factor", "احراز هویت دو مرحله ای", "امنیت"],
+    "steps": [
+      "Choose 2FA method (SMS/app)",
+      "Set up chosen method",
+      "Test 2FA",
+      "Provide backup codes"
+    ],
+    "estimated_time": "5 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "security_003",
+    "name": "account_pin_change",
+    "category": "Security",
+    "description": "Change account security PIN",
+    "keywords": ["change pin", "account pin", "تغییر پین حساب", "پین امنیتی"],
+    "steps": [
+      "Verify identity",
+      "Enter current PIN",
+      "Set new PIN",
+      "Confirm change"
+    ],
+    "estimated_time": "3 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "complaint_001",
+    "name": "submit_complaint",
+    "category": "Complaints & Feedback",
+    "description": "Submit a formal complaint",
+    "keywords": ["complaint", "شکایت", "نارضایتی", "مشکل"],
+    "steps": [
+      "Collect complaint details",
+      "Create ticket",
+      "Assign priority",
+      "Provide case number and timeline"
+    ],
+    "estimated_time": "10 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "complaint_002",
+    "name": "track_complaint",
+    "category": "Complaints & Feedback",
+    "description": "Track status of existing complaint",
+    "keywords": ["track", "status", "پیگیری", "وضعیت شکایت"],
+    "steps": [
+      "Enter case number",
+      "Retrieve current status",
+      "Provide estimated resolution time"
+    ],
+    "estimated_time": "2 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "vас_001",
+    "name": "vas_music_streaming",
+    "category": "Value Added Services",
+    "description": "Activate music streaming subscription",
+    "keywords": ["music", "streaming", "موسیقی", "سرویس"],
+    "steps": [
+      "Show available music services",
+      "Select service",
+      "Activate subscription"
+    ],
+    "estimated_time": "3 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "vas_002",
+    "name": "vas_cloud_storage",
+    "category": "Value Added Services",
+    "description": "Activate cloud storage service",
+    "keywords": ["cloud", "storage", "فضای ابری", "ذخیره سازی"],
+    "steps": [
+      "Show storage plans",
+      "Select plan",
+      "Activate service"
+    ],
+    "estimated_time": "3 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "vas_003",
+    "name": "vas_antivirus",
+    "category": "Value Added Services",
+    "description": "Activate mobile security/antivirus service",
+    "keywords": ["antivirus", "security", "آنتی ویروس", "امنیت موبایل"],
+    "steps": [
+      "Present security plans",
+      "Activate chosen plan",
+      "Send app download link"
+    ],
+    "estimated_time": "3 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "notify_001",
+    "name": "notification_preferences",
+    "category": "Notifications",
+    "description": "Update notification preferences (SMS, email, push)",
+    "keywords": ["notification", "alert", "اطلاع رسانی", "پیام"],
+    "steps": [
+      "Show current notification settings",
+      "Update preferences",
+      "Save changes"
+    ],
+    "estimated_time": "3 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "notify_002",
+    "name": "usage_alert_setup",
+    "category": "Notifications",
+    "description": "Set up alerts for data/call/SMS usage thresholds",
+    "keywords": ["usage alert", "threshold alert", "هشدار مصرف"],
+    "steps": [
+      "Select service type",
+      "Set threshold percentage",
+      "Choose notification method"
+    ],
+    "estimated_time": "3 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "store_001",
+    "name": "find_nearest_store",
+    "category": "Store & Location",
+    "description": "Find the nearest service center or store",
+    "keywords": ["store", "location", "شعبه", "مرکز خدمات", "نزدیک ترین"],
+    "steps": [
+      "Get customer location",
+      "Show nearest stores",
+      "Provide directions and hours"
+    ],
+    "estimated_time": "2 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "store_002",
+    "name": "book_store_appointment",
+    "category": "Store & Location",
+    "description": "Book an appointment at a service center",
+    "keywords": ["appointment", "book", "وقت", "رزرو", "نوبت"],
+    "steps": [
+      "Select nearest store",
+      "Choose service type",
+      "Select date and time",
+      "Confirm booking"
+    ],
+    "estimated_time": "5 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "portability_001",
+    "name": "mnp_status_check",
+    "category": "Number Management",
+    "description": "Check status of mobile number portability request",
+    "keywords": ["mnp", "portability status", "وضعیت انتقال شماره"],
+    "steps": [
+      "Enter porting request ID",
+      "Retrieve status",
+      "Provide expected completion time"
+    ],
+    "estimated_time": "2 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "business_001",
+    "name": "business_account_setup",
+    "category": "Business Services",
+    "description": "Set up a corporate/business account",
+    "keywords": ["business account", "corporate", "سازمانی", "شرکتی"],
+    "steps": [
+      "Collect business registration details",
+      "Verify business legitimacy",
+      "Set up account structure",
+      "Assign account manager"
+    ],
+    "estimated_time": "30 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "business_002",
+    "name": "dedicated_account_manager",
+    "category": "Business Services",
+    "description": "Request a dedicated account manager for business",
+    "keywords": ["account manager", "dedicated support", "مدیر حساب"],
+    "steps": [
+      "Verify business account tier",
+      "Assign available account manager",
+      "Schedule introduction call"
+    ],
+    "estimated_time": "10 minutes",
+    "requires_verification": true
+  },
+  {
+    "id": "misc_001",
+    "name": "check_coverage",
+    "category": "Network",
+    "description": "Check network coverage for a specific location",
+    "keywords": ["coverage", "signal", "پوشش شبکه", "آنتن", "سیگنال"],
+    "steps": [
+      "Enter location or address",
+      "Display coverage map",
+      "Show available network types (2G/3G/4G/5G)"
+    ],
+    "estimated_time": "2 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "misc_002",
+    "name": "report_outage",
+    "category": "Network",
+    "description": "Report a network outage or service disruption",
+    "keywords": ["outage", "down", "قطعی", "اختلال شبکه"],
+    "steps": [
+      "Collect location and affected services",
+      "Check existing outage tickets",
+      "Create new outage report if needed",
+      "Provide estimated restoration time"
+    ],
+    "estimated_time": "5 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "misc_003",
+    "name": "request_invoice_copy",
+    "category": "Billing & Invoices",
+    "description": "Request a copy of invoice for specific period",
+    "keywords": ["invoice copy", "statement", "کپی فاکتور", "رونوشت"],
+    "steps": [
+      "Select billing period",
+      "Choose delivery method (email/post)",
+      "Process request"
+    ],
+    "estimated_time": "3 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "misc_004",
+    "name": "imei_check",
+    "category": "Device",
+    "description": "Check if a device IMEI is valid, blacklisted, or active",
+    "keywords": ["imei", "blacklist", "IMEI بررسی", "گوشی مسروقه"],
+    "steps": [
+      "Enter IMEI number",
+      "Check against national IMEI database",
+      "Report status"
+    ],
+    "estimated_time": "2 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "misc_005",
+    "name": "emergency_services_info",
+    "category": "General",
+    "description": "Provide emergency contact numbers and services",
+    "keywords": ["emergency", "اورژانس", "آتش نشانی", "پلیس"],
+    "steps": [
+      "Provide relevant emergency numbers",
+      "Confirm service is free to call"
+    ],
+    "estimated_time": "1 minute",
+    "requires_verification": false
+  },
+  {
+    "id": "misc_006",
+    "name": "check_promotions",
+    "category": "Promotions",
+    "description": "Check available promotions and special offers",
+    "keywords": ["promotion", "offer", "discount", "تخفیف", "پیشنهاد", "جشنواره"],
+    "steps": [
+      "Retrieve active promotions",
+      "Filter by account eligibility",
+      "Present relevant offers"
+    ],
+    "estimated_time": "3 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "misc_007",
+    "name": "loyalty_points_check",
+    "category": "Loyalty Program",
+    "description": "Check loyalty points balance and redemption options",
+    "keywords": ["loyalty", "points", "reward", "امتیاز", "پاداش"],
+    "steps": [
+      "Retrieve points balance",
+      "Show redemption options",
+      "Process redemption if requested"
+    ],
+    "estimated_time": "3 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "misc_008",
+    "name": "refer_friend",
+    "category": "Promotions",
+    "description": "Set up or check referral program",
+    "keywords": ["refer", "referral", "معرفی دوست", "رفرال"],
+    "steps": [
+      "Get referral code",
+      "Explain referral benefits",
+      "Track referral status"
+    ],
+    "estimated_time": "3 minutes",
+    "requires_verification": false
+  },
+  {
+    "id": "misc_009",
+    "name": "language_preference",
+    "category": "Account Management",
+    "description": "Set preferred language for communications",
+    "keywords": ["language", "زبان", "فارسی", "english"],
+    "steps": [
+      "Show available languages",
+      "Update preference",
+      "Confirm change"
+    ],
+    "estimated_time": "1 minute",
+    "requires_verification": false
+  },
+  {
+    "id": "misc_010",
+    "name": "callback_request",
+    "category": "Support",
+    "description": "Schedule a callback from a support agent",
+    "keywords": ["callback", "call back", "تماس مجدد", "وقت تماس"],
+    "steps": [
+      "Select preferred time slot",
+      "Confirm contact number",
+      "Schedule callback"
+    ],
+    "estimated_time": "2 minutes",
+    "requires_verification": false
+  }
+]
