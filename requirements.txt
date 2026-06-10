@@ -1,2 +1,16 @@
+# Web Framework
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+pydantic>=2.7.0
+
+# LangChain / LangGraph (new unified stack)
+langchain>=1.0.0
+langchain-openai>=0.3.0
+langchain-core>=0.3.0
+langgraph>=0.3.0
+
+# UI
 streamlit>=1.35.0
+
+# HTTP
 requests>=2.31.0

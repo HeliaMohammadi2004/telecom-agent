@@ -1,41 +1,55 @@
 # 📞 Telecom AI Agent — Project 2
 
-**Data Mining Course | AI-Powered Call Center Agent**
-
-This project replaces human telecom operators with an AI agent. The agent understands customer requests (in English or Farsi), selects the best matching functionality from a registry of 70+ telecom functions, and guides the customer through the process — all powered by a local LLM via LM Studio.
+**Data Mining Course | LangChain + FastAPI + LM Studio**
 
 ---
 
-## 🎯 How It Works
+## 🏗️ Architecture
 
 ```
-Customer Request
-      │
-      ▼
-LLM (Qwen2.5-3B)  ──►  Reads all 70+ functions  ──►  Selects best match
-      │
-      ▼
-Agent Response  ──►  Walks customer through steps
-      │
-      ▼
-Streamlit Chat UI
+┌─────────────────────────────────────────────────────┐
+│                   Streamlit UI                      │
+│              (app/streamlit_app.py)                 │
+└───────────────────────┬─────────────────────────────┘
+                        │  user message
+                        ▼
+┌─────────────────────────────────────────────────────┐
+│             LangChain ReAct Agent                   │
+│           (agent/langchain_agent.py)                │
+│                                                     │
+│  LLM: Qwen2.5-3B  ◄──────►  17 LangChain Tools    │
+│  (via LM Studio)             (one per API group)   │
+└───────────────────────┬─────────────────────────────┘
+                        │  HTTP calls
+                        ▼
+┌─────────────────────────────────────────────────────┐
+│              FastAPI Backend                        │
+│              (backend/main.py)                      │
+│                                                     │
+│   /users  /balance  /sim  /data  /plans             │
+│   /orders  /calls  /complaints  /account            │
+└─────────────────────────────────────────────────────┘
 ```
 
-**Two LLM calls per turn:**
-1. **Function Selection** — The model reads all available functions and returns the best `function_id` as JSON
-2. **Response Generation** — The model generates a natural, professional response using the selected function's steps
+**Flow per message:**
+1. Customer types a request
+2. LangChain ReAct agent thinks → selects tool → calls FastAPI endpoint
+3. Gets real data from mock database
+4. LLM formats a natural response
+5. UI shows response + which tools were called
 
 ---
 
-## 🗂️ Project Structure
+## 📁 Project Structure
 
 ```
 telecom-agent/
+├── backend/
+│   └── main.py              # FastAPI — all endpoints + mock database
+├── agent/
+│   └── langchain_agent.py   # LangChain ReAct agent + 17 tools
 ├── app/
-│   ├── agent.py          # Core agent logic (LM Studio client + pipeline)
-│   └── streamlit_app.py  # Streamlit UI
-├── data/
-│   └── functions_registry.json  # 70+ telecom functionalities
+│   └── streamlit_app.py     # Streamlit chat UI
 ├── requirements.txt
 ├── .env.example
 └── README.md
@@ -43,113 +57,103 @@ telecom-agent/
 
 ---
 
-## ⚙️ Setup
+## ⚙️ Setup & Run
 
-### 1. Prerequisites
-
-- Python 3.10+
-- [LM Studio](https://lmstudio.ai/) installed
-- Model downloaded: `Qwen2.5 3B Instruct GGUF Q4_K_M`
+### 1. Install dependencies
+```bash
+pip install -r requirements.txt
+```
 
 ### 2. Start LM Studio
-
 1. Open LM Studio
-2. Load the **Qwen2.5-3B-Instruct-GGUF** model
-3. Go to **Local Server** tab (left sidebar)
-4. Click **Start Server** (default port: 1234)
-5. Confirm it shows: `Server running at http://localhost:1234`
+2. Load **Qwen2.5-3B-Instruct-GGUF Q4_K_M**
+3. Go to **Local Server** tab → **Start Server** (port 1234)
 
-### 3. Install & Run
-
+### 3. Start FastAPI backend
 ```bash
-# Clone the repository
-git clone https://github.com/<your-username>/telecom-agent.git
-cd telecom-agent
+# From project root
+uvicorn backend.main:app --reload --port 8000
+```
+API docs available at: **http://localhost:8000/docs**
 
-# Create virtual environment (recommended)
-python -m venv venv
-source venv/bin/activate        # Linux/Mac
-# venv\Scripts\activate         # Windows
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run the app
+### 4. Start Streamlit UI
+```bash
+# From project root
 streamlit run app/streamlit_app.py
 ```
-
-The app will open at **http://localhost:8501**
-
----
-
-## 🧪 Example Queries
-
-| Customer Request | Expected Function |
-|---|---|
-| "I forgot my SIM PIN" | `retrieve_sim_pin` |
-| "I have no network signal" | `network_troubleshoot` |
-| "How much data have I used?" | `check_data_usage` |
-| "پین سیم کارتم را فراموش کردم" | `retrieve_sim_pin` |
-| "میخوام شماره ناشناس را مسدود کنم" | `block_number` |
-| "I need to activate roaming for my trip" | `roaming_activation` |
-| "Someone is using my account without permission" | `fraud_report` |
+App available at: **http://localhost:8501**
 
 ---
 
-## 📊 Function Registry
+## 🔧 API Endpoints
 
-The `data/functions_registry.json` contains **70+ functions** across these categories:
-
-| Category | Count |
-|---|---|
-| SIM Card | 5 |
-| Account & Balance | 4 |
-| Plans & Packages | 8 |
-| Data & Internet | 5 |
-| Billing & Invoices | 5 |
-| Number Management | 5 |
-| Call Services | 6 |
-| SMS Services | 2 |
-| Account Management | 7 |
-| Technical Support | 5 |
-| Security | 3 |
-| Business Services | 2 |
-| Complaints & Feedback | 2 |
-| Value Added Services | 3 |
-| Notifications | 2 |
-| Store & Location | 2 |
-| Network | 2 |
-| Loyalty & Promotions | 3 |
+| Method | URL | Description |
+|--------|-----|-------------|
+| GET | `/users` | List users (page, limit) |
+| GET | `/users/{id}` | Get user by ID |
+| POST | `/users` | Create new user |
+| GET | `/orders/{id}/status` | Get order status |
+| GET | `/balance/{phone}` | Check balance |
+| POST | `/balance/recharge` | Recharge account |
+| GET | `/sim/{phone}` | SIM card info |
+| POST | `/sim/puk` | Get PUK (requires national ID) |
+| POST | `/sim/{phone}/block` | Block SIM |
+| GET | `/data/{phone}/usage` | Data usage |
+| GET | `/plans` | All plans |
+| POST | `/plans/change` | Change plan |
+| POST | `/calls/block-number` | Block a number |
+| POST | `/complaints` | Submit complaint |
+| GET | `/complaints/{id}` | Track complaint |
+| POST | `/account/{phone}/suspend` | Suspend account |
+| GET | `/account/{phone}/info` | Full account info |
 
 ---
 
-## 🔧 Configuration
+## 🧪 Test Users (Mock Database)
 
-Copy `.env.example` to `.env` and adjust if needed:
+| Phone | Name | Plan | Status |
+|-------|------|------|--------|
+| 09121234567 | Ali Rezaei | Gold | active |
+| 09351234567 | Sara Mohammadi | Silver | active |
+| 09011234567 | Reza Hosseini | Basic | suspended |
 
-```env
-LM_STUDIO_URL=http://localhost:1234/v1
-LM_STUDIO_MODEL=qwen2.5-3b-instruct
+---
+
+## 💬 Example Queries
+
+| Query | Tools Called |
+|-------|-------------|
+| موجودی حساب 09121234567 | `check_balance` |
+| مصرف اینترنت 09351234567 | `check_data_usage` |
+| پین قفله، کد ملی 1122334455 | `retrieve_puk_code` |
+| طرح‌های موجود | `get_available_plans` |
+| ارتقا به Gold برای 09351234567 | `get_available_plans` → `change_subscription_plan` |
+| بلاک کردن 09999999999 | `block_phone_number` |
+| وضعیت سفارش ord002 | `get_order_status` |
+
+---
+
+## 🔬 LangChain ReAct Chain
+
+The agent uses **ReAct** (Reasoning + Acting) pattern:
+```
+Thought: I need to check the customer's balance
+Action: check_balance
+Action Input: 09121234567
+Observation: {"phone": "09121234567", "balance": 45000, "plan": "Gold"}
+Thought: I now have the balance info
+Final Answer: موجودی حساب شما 45,000 ریال است و طرح فعلی شما Gold می‌باشد.
 ```
 
 ---
 
-## 📝 Notes
+## 🛠️ Tech Stack
 
-- The model is small (3B) — it works well for function selection but complex multi-turn reasoning may vary
-- Responses are in the same language as the customer's request (Farsi or English)
-- The sidebar shows real-time matched function details and confidence score
-- Conversation history (last 6 turns) is sent with each request for context
-
----
-
-## 🏗️ Tech Stack
-
-| Tool | Purpose |
-|---|---|
-| Python | Core language |
-| Streamlit | Web UI |
-| LM Studio | Local LLM server |
-| Qwen2.5-3B | Language model |
-| requests | HTTP client |
-| JSON | Function registry |
+| Component | Technology |
+|-----------|-----------|
+| LLM | Qwen2.5-3B-Instruct (local) |
+| LLM Server | LM Studio |
+| Agent Framework | LangChain ReAct |
+| Backend API | FastAPI |
+| UI | Streamlit |
+| Language | Python 3.10+ |
