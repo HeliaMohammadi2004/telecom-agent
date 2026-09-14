@@ -1,55 +1,61 @@
-# 📞 Telecom AI Agent — Project 2
+# پروژه ۲ — عامل هوشمند مخابرات
 
-**Data Mining Course | LangChain + FastAPI + LM Studio**
+## معرفی پروژه
 
----
+در این پروژه یک عامل هوشمند برای پاسخ‌گویی به درخواست‌های کاربران حوزه مخابرات طراحی و پیاده‌سازی شده است. این سیستم با استفاده از **LangChain**، یک مدل زبانی محلی و یک **FastAPI** Backend، درخواست کاربر را تحلیل کرده و با فراخوانی سرویس مناسب، اطلاعات موردنیاز را دریافت و پاسخ را به صورت متنی تولید می‌کند.
 
-## 🏗️ Architecture
-
-```
-┌─────────────────────────────────────────────────────┐
-│                   Streamlit UI                      │
-│              (app/streamlit_app.py)                 │
-└───────────────────────┬─────────────────────────────┘
-                        │  user message
-                        ▼
-┌─────────────────────────────────────────────────────┐
-│             LangChain ReAct Agent                   │
-│           (agent/langchain_agent.py)                │
-│                                                     │
-│  LLM: Qwen2.5-3B  ◄──────►  17 LangChain Tools    │
-│  (via LM Studio)             (one per API group)   │
-└───────────────────────┬─────────────────────────────┘
-                        │  HTTP calls
-                        ▼
-┌─────────────────────────────────────────────────────┐
-│              FastAPI Backend                        │
-│              (backend/main.py)                      │
-│                                                     │
-│   /users  /balance  /sim  /data  /plans             │
-│   /orders  /calls  /complaints  /account            │
-└─────────────────────────────────────────────────────┘
-```
-
-**Flow per message:**
-1. Customer types a request
-2. LangChain ReAct agent thinks → selects tool → calls FastAPI endpoint
-3. Gets real data from mock database
-4. LLM formats a natural response
-5. UI shows response + which tools were called
+مدل زبانی مورد استفاده از طریق **LM Studio** اجرا شده و چارچوب **ReAct** برای تصمیم‌گیری و انتخاب ابزار مناسب به کار گرفته شده است.
 
 ---
 
-## 📁 Project Structure
+## معماری سیستم
 
+روند کلی اجرای برنامه به صورت زیر است:
+
+```id="bjm1s8"
+رابط کاربری Streamlit
+          ↓
+دریافت درخواست کاربر
+          ↓
+عامل هوشمند LangChain
+          ↓
+انتخاب ابزار مناسب
+          ↓
+ارسال درخواست به FastAPI
+          ↓
+دریافت اطلاعات از پایگاه داده آزمایشی
+          ↓
+تولید پاسخ توسط مدل زبانی
+          ↓
+نمایش نتیجه در رابط کاربری
 ```
+
+---
+
+## روند اجرای هر درخواست
+
+در زمان ارسال هر پیام توسط کاربر، مراحل زیر انجام می‌شود:
+
+1. کاربر درخواست خود را وارد می‌کند.
+2. عامل هوشمند متن را بررسی می‌کند.
+3. ابزار مناسب برای انجام عملیات انتخاب می‌شود.
+4. درخواست به سرویس مربوطه در FastAPI ارسال می‌شود.
+5. اطلاعات از پایگاه داده آزمایشی دریافت می‌شود.
+6. مدل زبانی پاسخ مناسب را تولید می‌کند.
+7. پاسخ و ابزار استفاده‌شده در رابط کاربری نمایش داده می‌شود.
+
+---
+
+## ساختار پروژه
+
+```id="odfbpi"
 telecom-agent/
 ├── backend/
-│   └── main.py              # FastAPI — all endpoints + mock database
+│   └── main.py
 ├── agent/
-│   └── langchain_agent.py   # LangChain ReAct agent + 17 tools
+│   └── langchain_agent.py
 ├── app/
-│   └── streamlit_app.py     # Streamlit chat UI
+│   └── streamlit_app.py
 ├── requirements.txt
 ├── .env.example
 └── README.md
@@ -57,103 +63,115 @@ telecom-agent/
 
 ---
 
-## ⚙️ Setup & Run
+## توضیح فایل‌ها
 
-### 1. Install dependencies
-```bash
+* **backend/main.py**: شامل سرویس‌های FastAPI و پایگاه داده آزمایشی
+* **langchain_agent.py**: پیاده‌سازی عامل هوشمند و ابزارهای LangChain
+* **streamlit_app.py**: رابط کاربری برنامه با استفاده از Streamlit
+* **requirements.txt**: کتابخانه‌های موردنیاز پروژه
+* **.env.example**: نمونه فایل تنظیمات محیطی
+
+---
+
+## پیش‌نیازها
+
+برای اجرای پروژه موارد زیر موردنیاز است:
+
+* Python نسخه 3.10 یا بالاتر
+* نصب LM Studio
+* بارگذاری مدل Qwen2.5-3B-Instruct
+* فعال بودن Local Server در LM Studio
+* نصب کتابخانه‌های پروژه
+
+---
+
+## نحوه اجرا
+
+ابتدا کتابخانه‌های موردنیاز را نصب کنید.
+
+```bash id="7mjlwm"
 pip install -r requirements.txt
 ```
 
-### 2. Start LM Studio
-1. Open LM Studio
-2. Load **Qwen2.5-3B-Instruct-GGUF Q4_K_M**
-3. Go to **Local Server** tab → **Start Server** (port 1234)
+سپس برنامه LM Studio را اجرا کرده، مدل Qwen2.5-3B-Instruct را بارگذاری کنید و Local Server را فعال نمایید.
 
-### 3. Start FastAPI backend
-```bash
-# From project root
+در مرحله بعد، سرویس FastAPI را اجرا کنید.
+
+```bash id="p07x6t"
 uvicorn backend.main:app --reload --port 8000
 ```
-API docs available at: **http://localhost:8000/docs**
 
-### 4. Start Streamlit UI
-```bash
-# From project root
+در پایان رابط کاربری Streamlit را اجرا نمایید.
+
+```bash id="4yq9yb"
 streamlit run app/streamlit_app.py
 ```
-App available at: **http://localhost:8501**
 
 ---
 
-## 🔧 API Endpoints
+## سرویس‌های ارائه‌شده
 
-| Method | URL | Description |
-|--------|-----|-------------|
-| GET | `/users` | List users (page, limit) |
-| GET | `/users/{id}` | Get user by ID |
-| POST | `/users` | Create new user |
-| GET | `/orders/{id}/status` | Get order status |
-| GET | `/balance/{phone}` | Check balance |
-| POST | `/balance/recharge` | Recharge account |
-| GET | `/sim/{phone}` | SIM card info |
-| POST | `/sim/puk` | Get PUK (requires national ID) |
-| POST | `/sim/{phone}/block` | Block SIM |
-| GET | `/data/{phone}/usage` | Data usage |
-| GET | `/plans` | All plans |
-| POST | `/plans/change` | Change plan |
-| POST | `/calls/block-number` | Block a number |
-| POST | `/complaints` | Submit complaint |
-| GET | `/complaints/{id}` | Track complaint |
-| POST | `/account/{phone}/suspend` | Suspend account |
-| GET | `/account/{phone}/info` | Full account info |
+در این پروژه تعدادی سرویس برای شبیه‌سازی امکانات یک سامانه مخابراتی پیاده‌سازی شده است که از جمله آن‌ها می‌توان به موارد زیر اشاره کرد:
 
----
-
-## 🧪 Test Users (Mock Database)
-
-| Phone | Name | Plan | Status |
-|-------|------|------|--------|
-| 09121234567 | Ali Rezaei | Gold | active |
-| 09351234567 | Sara Mohammadi | Silver | active |
-| 09011234567 | Reza Hosseini | Basic | suspended |
+* مشاهده اطلاعات کاربران
+* ایجاد کاربر جدید
+* بررسی موجودی حساب
+* شارژ حساب
+* مشاهده اطلاعات سیم‌کارت
+* دریافت کد PUK
+* مسدود کردن سیم‌کارت
+* مشاهده میزان مصرف اینترنت
+* نمایش طرح‌های موجود
+* تغییر طرح اشتراک
+* مسدود کردن شماره تلفن
+* ثبت شکایت
+* پیگیری شکایت
+* مشاهده وضعیت سفارش
+* تعلیق حساب
+* مشاهده اطلاعات کامل حساب
 
 ---
 
-## 💬 Example Queries
+## کاربران نمونه
 
-| Query | Tools Called |
-|-------|-------------|
-| موجودی حساب 09121234567 | `check_balance` |
-| مصرف اینترنت 09351234567 | `check_data_usage` |
-| پین قفله، کد ملی 1122334455 | `retrieve_puk_code` |
-| طرح‌های موجود | `get_available_plans` |
-| ارتقا به Gold برای 09351234567 | `get_available_plans` → `change_subscription_plan` |
-| بلاک کردن 09999999999 | `block_phone_number` |
-| وضعیت سفارش ord002 | `get_order_status` |
+برای آزمایش برنامه، چند کاربر نمونه در پایگاه داده قرار داده شده‌اند.
+
+| شماره تلفن  | نام        | طرح    | وضعیت     |
+| ----------- | ---------- | ------ | --------- |
+| 09121234567 | علی رضایی  | Gold   | فعال      |
+| 09351234567 | سارا محمدی | Silver | فعال      |
+| 09011234567 | رضا حسینی  | Basic  | تعلیق شده |
 
 ---
 
-## 🔬 LangChain ReAct Chain
+## نمونه درخواست‌ها
 
-The agent uses **ReAct** (Reasoning + Acting) pattern:
-```
-Thought: I need to check the customer's balance
-Action: check_balance
-Action Input: 09121234567
-Observation: {"phone": "09121234567", "balance": 45000, "plan": "Gold"}
-Thought: I now have the balance info
-Final Answer: موجودی حساب شما 45,000 ریال است و طرح فعلی شما Gold می‌باشد.
-```
+چند نمونه از درخواست‌هایی که برنامه قادر به پاسخ‌گویی به آن‌ها است:
+
+* بررسی موجودی حساب
+* مشاهده میزان مصرف اینترنت
+* دریافت کد PUK
+* مشاهده طرح‌های قابل انتخاب
+* تغییر طرح اشتراک
+* مسدود کردن یک شماره تلفن
+* بررسی وضعیت سفارش
 
 ---
 
-## 🛠️ Tech Stack
+## نحوه عملکرد عامل هوشمند
 
-| Component | Technology |
-|-----------|-----------|
-| LLM | Qwen2.5-3B-Instruct (local) |
-| LLM Server | LM Studio |
-| Agent Framework | LangChain ReAct |
-| Backend API | FastAPI |
-| UI | Streamlit |
-| Language | Python 3.10+ |
+عامل هوشمند از روش **ReAct** استفاده می‌کند. در این روش ابتدا درخواست کاربر تحلیل می‌شود، سپس ابزار مناسب انتخاب شده و نتیجه آن دریافت می‌شود. در پایان مدل زبانی با استفاده از اطلاعات به‌دست‌آمده، پاسخ نهایی را تولید می‌کند.
+
+---
+
+## فناوری‌های استفاده‌شده
+
+در این پروژه از فناوری‌های زیر استفاده شده است:
+
+* Python 3.10
+* LangChain
+* FastAPI
+* Streamlit
+* LM Studio
+* مدل زبانی Qwen2.5-3B-Instruct
+* الگوی ReAct برای تصمیم‌گیری عامل هوشمند

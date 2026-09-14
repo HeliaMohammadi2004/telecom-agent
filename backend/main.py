@@ -1,8 +1,3 @@
-"""
-Telecom Backend API — FastAPI
-Mock database + all telecom endpoints the LangChain Agent will call
-"""
-
 from fastapi import FastAPI, HTTPException, Query, Path
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr
@@ -20,9 +15,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ──────────────────────────────────────────────
-# Mock Database
-# ──────────────────────────────────────────────
 
 USERS_DB: dict[str, dict] = {
     "u001": {
@@ -90,9 +82,6 @@ BLOCKLIST_DB: dict[str, list] = {
     "09011234567": [],
 }
 
-# ──────────────────────────────────────────────
-# Schemas
-# ──────────────────────────────────────────────
 
 class UserCreate(BaseModel):
     name: str
@@ -126,9 +115,6 @@ class DataLimitRequest(BaseModel):
     phone: str
     limit_gb: float
 
-# ──────────────────────────────────────────────
-# Helper
-# ──────────────────────────────────────────────
 
 def find_user_by_phone(phone: str) -> Optional[dict]:
     for u in USERS_DB.values():
@@ -142,13 +128,9 @@ def require_user(phone: str) -> dict:
         raise HTTPException(status_code=404, detail=f"No user found with phone {phone}")
     return u
 
-# ──────────────────────────────────────────────
-# ── Users ──
-# ──────────────────────────────────────────────
 
 @app.get("/users", summary="Get list of users")
 def get_users(page: int = Query(1, ge=1), limit: int = Query(10, ge=1, le=100)):
-    """دریافت لیست کاربران با صفحه‌بندی"""
     all_users = list(USERS_DB.values())
     start = (page - 1) * limit
     return {
@@ -159,14 +141,12 @@ def get_users(page: int = Query(1, ge=1), limit: int = Query(10, ge=1, le=100)):
 
 @app.get("/users/{user_id}", summary="Get user by ID")
 def get_user(user_id: str = Path(...)):
-    """دریافت اطلاعات کامل کاربر بر اساس شناسه"""
     if user_id not in USERS_DB:
         raise HTTPException(status_code=404, detail="User not found")
     return USERS_DB[user_id]
 
 @app.post("/users", status_code=201, summary="Create new user")
 def create_user(body: UserCreate):
-    """ثبت کاربر جدید — email باید یونیک باشد"""
     for u in USERS_DB.values():
         if u["email"] == body.email:
             raise HTTPException(status_code=409, detail="Email already exists")
@@ -188,13 +168,8 @@ def create_user(body: UserCreate):
     BLOCKLIST_DB[body.phone] = []
     return user
 
-# ──────────────────────────────────────────────
-# ── Orders ──
-# ──────────────────────────────────────────────
-
 @app.get("/orders/{order_id}/status", summary="Get order status")
 def get_order_status(order_id: str = Path(...)):
-    """دریافت وضعیت فعلی سفارش — فقط به سفارش‌های خودت دسترسی داری"""
     if order_id not in ORDERS_DB:
         raise HTTPException(status_code=404, detail="Order not found")
     o = ORDERS_DB[order_id]
@@ -207,39 +182,28 @@ def get_user_orders(user_id: str):
     orders = [o for o in ORDERS_DB.values() if o["user_id"] == user_id]
     return {"user_id": user_id, "orders": orders}
 
-# ──────────────────────────────────────────────
-# ── Balance & Recharge ──
-# ──────────────────────────────────────────────
-
 @app.get("/balance/{phone}", summary="Check account balance")
 def check_balance(phone: str):
-    """بررسی موجودی حساب"""
     user = require_user(phone)
     return {"phone": phone, "name": user["name"], "balance": user["balance"], "plan": user["plan"]}
 
 @app.post("/balance/recharge", summary="Recharge account")
 def recharge(body: RechargeRequest):
-    """شارژ حساب"""
     user = require_user(body.phone)
     user["balance"] += body.amount
     return {"phone": body.phone, "recharged": body.amount, "new_balance": user["balance"], "status": "success"}
 
-# ──────────────────────────────────────────────
-# ── SIM Card ──
-# ──────────────────────────────────────────────
 
 @app.get("/sim/{phone}", summary="Get SIM info")
 def get_sim_info(phone: str):
-    """اطلاعات سیم‌کارت"""
     if phone not in SIMS_DB:
         raise HTTPException(404, "SIM not found")
     sim = SIMS_DB[phone].copy()
-    sim.pop("puk")  # never expose PUK in normal query
+    sim.pop("puk")  
     return sim
 
 @app.post("/sim/puk", summary="Retrieve PUK code after identity verification")
 def get_puk(body: SimPukRequest):
-    """دریافت کد PUK پس از تأیید هویت"""
     user = require_user(body.phone)
     if user["national_id"] != body.national_id:
         raise HTTPException(403, "Identity verification failed — national ID mismatch")
@@ -265,13 +229,9 @@ def unblock_sim(phone: str):
     SIMS_DB[phone]["pin_blocked"] = False
     return {"phone": phone, "status": "active", "message": "SIM card unblocked successfully"}
 
-# ──────────────────────────────────────────────
-# ── Data Usage ──
-# ──────────────────────────────────────────────
 
 @app.get("/data/{phone}/usage", summary="Check internet data usage")
 def check_data_usage(phone: str):
-    """بررسی مصرف اینترنت"""
     require_user(phone)
     if phone not in DATA_USAGE_DB:
         raise HTTPException(404, "Data record not found")
@@ -295,13 +255,9 @@ def set_data_limit(body: DataLimitRequest):
     DATA_USAGE_DB[body.phone]["limit_gb"] = body.limit_gb
     return {"phone": body.phone, "limit_gb": body.limit_gb, "status": "limit set"}
 
-# ──────────────────────────────────────────────
-# ── Plans ──
-# ──────────────────────────────────────────────
 
 @app.get("/plans", summary="Get all available plans")
 def get_plans():
-    """لیست همه طرح‌های اشتراک"""
     return {"plans": list(PLANS_DB.values())}
 
 @app.get("/plans/{plan_name}", summary="Get specific plan details")
@@ -312,7 +268,6 @@ def get_plan(plan_name: str):
 
 @app.post("/plans/change", summary="Change subscription plan")
 def change_plan(body: PlanChangeRequest):
-    """تغییر طرح اشتراک"""
     user = require_user(body.phone)
     if body.new_plan not in PLANS_DB:
         raise HTTPException(400, f"Invalid plan. Choose from: {list(PLANS_DB.keys())}")
@@ -327,13 +282,8 @@ def change_plan(body: PlanChangeRequest):
         "new_monthly_price": PLANS_DB[body.new_plan]["price"],
     }
 
-# ──────────────────────────────────────────────
-# ── Call Services ──
-# ──────────────────────────────────────────────
-
 @app.post("/calls/block-number", summary="Block a phone number")
 def block_number(body: BlockNumberRequest):
-    """مسدود کردن یک شماره تلفن"""
     require_user(body.phone)
     if body.phone not in BLOCKLIST_DB:
         BLOCKLIST_DB[body.phone] = []
@@ -347,13 +297,9 @@ def get_blocklist(phone: str):
     require_user(phone)
     return {"phone": phone, "blocked_numbers": BLOCKLIST_DB.get(phone, [])}
 
-# ──────────────────────────────────────────────
-# ── Complaints & Tickets ──
-# ──────────────────────────────────────────────
 
 @app.post("/complaints", status_code=201, summary="Submit a complaint")
 def submit_complaint(body: ComplaintCreate):
-    """ثبت شکایت"""
     require_user(body.phone)
     ticket_id = f"TKT-{str(uuid.uuid4())[:8].upper()}"
     ticket = {
@@ -368,14 +314,9 @@ def submit_complaint(body: ComplaintCreate):
 
 @app.get("/complaints/{ticket_id}", summary="Track complaint status")
 def track_complaint(ticket_id: str):
-    """پیگیری وضعیت شکایت"""
     if ticket_id not in TICKETS_DB:
         raise HTTPException(404, "Ticket not found")
     return TICKETS_DB[ticket_id]
-
-# ──────────────────────────────────────────────
-# ── Account Management ──
-# ──────────────────────────────────────────────
 
 @app.post("/account/{phone}/suspend", summary="Suspend account")
 def suspend_account(phone: str):
@@ -391,7 +332,6 @@ def reactivate_account(phone: str):
 
 @app.get("/account/{phone}/info", summary="Get full account info")
 def get_account_info(phone: str):
-    """اطلاعات کامل حساب"""
     user = require_user(phone)
     sim  = SIMS_DB.get(phone, {})
     data = DATA_USAGE_DB.get(phone, {})
@@ -403,9 +343,6 @@ def get_account_info(phone: str):
         "plan_details": plan,
     }
 
-# ──────────────────────────────────────────────
-# Health Check
-# ──────────────────────────────────────────────
 
 @app.get("/health")
 def health():

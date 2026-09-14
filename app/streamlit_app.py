@@ -1,21 +1,10 @@
-"""
-Telecom AI Agent — Streamlit UI
-Project 2: LangChain/LangGraph Agent + FastAPI Backend + LM Studio
-"""
-
 import sys
 import os
 import time
 import uuid
 import streamlit as st
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "agent"))
-
 from langchain_agent import build_agent, run_agent, check_api_health, check_lm_health, ALL_TOOLS
-
-# ──────────────────────────────────────────────
-# Page Config
-# ──────────────────────────────────────────────
 
 st.set_page_config(
     page_title="Telecom AI Agent",
@@ -23,10 +12,6 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
-
-# ──────────────────────────────────────────────
-# CSS
-# ──────────────────────────────────────────────
 
 st.markdown("""
 <style>
@@ -111,9 +96,6 @@ html, body, [class*="css"] { font-family: 'IBM Plex Sans', sans-serif; }
 </style>
 """, unsafe_allow_html=True)
 
-# ──────────────────────────────────────────────
-# Session State
-# ──────────────────────────────────────────────
 
 if "messages"   not in st.session_state: st.session_state.messages   = []
 if "agent"      not in st.session_state: st.session_state.agent      = None
@@ -136,10 +118,6 @@ def refresh_status():
 if st.session_state.agent is None:
     refresh_status()
 
-# ──────────────────────────────────────────────
-# Sidebar
-# ──────────────────────────────────────────────
-
 with st.sidebar:
     st.markdown("## ⚙️ System Status")
 
@@ -159,13 +137,12 @@ with st.sidebar:
         st.rerun()
 
     if not st.session_state.api_ok:
-        st.warning("در ترمینال اجرا کن:\n```\nuvicorn backend.main:app --reload\n```")
+        st.warning("run in terminal:\n```\nuvicorn backend.main:app --reload\n```")
     if not st.session_state.lm_ok:
         st.warning("LM Studio → Local Server → Start (port 1234)")
 
     st.divider()
 
-    # Tools list
     st.markdown("## 🔧 LangChain Tools")
     st.markdown(
         f'<div class="sidebar-box"><h4>{len(ALL_TOOLS)} tools</h4>'
@@ -176,7 +153,6 @@ with st.sidebar:
 
     st.divider()
 
-    # Test users
     st.markdown("## 👥 Test Users")
     st.markdown("""<div class="sidebar-box">
         <h4>Mock Database</h4>
@@ -185,7 +161,6 @@ with st.sidebar:
         <span class="tool-badge">09011234567</span> Reza — Basic ⏸️
     </div>""", unsafe_allow_html=True)
 
-    # Last tools used
     if st.session_state.last_tools:
         st.divider()
         st.markdown("## 🎯 Last API Calls")
@@ -200,59 +175,22 @@ with st.sidebar:
     if st.button("🗑️ Clear Chat", use_container_width=True):
         st.session_state.messages   = []
         st.session_state.last_tools = []
-        st.session_state.thread_id  = str(uuid.uuid4())  # new memory thread
+        st.session_state.thread_id  = str(uuid.uuid4()) 
         if st.session_state.api_ok and st.session_state.lm_ok:
             st.session_state.agent = build_agent()
         st.rerun()
 
-# ──────────────────────────────────────────────
-# Header
-# ──────────────────────────────────────────────
-
 st.markdown("""
 <div class="header-box">
-    <h1>📞 Telecom AI Agent</h1>
+    <h1>🤖 Telecom AI Agent</h1>
     <p>
         <span class="header-accent">LangGraph</span> &nbsp;·&nbsp;
         <span class="header-accent">FastAPI</span> &nbsp;·&nbsp;
         <span class="header-accent">Qwen2.5-3B</span> &nbsp;·&nbsp;
         <span class="header-accent">LM Studio</span>
     </p>
-    <p>Data Mining Project 2 — AI replaces human call-center operators</p>
 </div>
 """, unsafe_allow_html=True)
-
-# ──────────────────────────────────────────────
-# Quick Examples
-# ──────────────────────────────────────────────
-
-st.markdown("#### 💡 Quick Examples")
-examples = [
-    ("💰 موجودی حساب",       "موجودی حساب شماره 09121234567 چقدره؟"),
-    ("📶 مصرف اینترنت",      "چقدر اینترنت مصرف کردم؟ شماره من 09351234567 هست"),
-    ("🔑 کد PUK",             "پین سیم کارتم قفل شده. شماره‌ام 09011234567 و کد ملی‌ام 1122334455 هست"),
-    ("📋 طرح‌های موجود",      "چه طرح‌های اشتراکی دارید و قیمت‌شون چقدره؟"),
-    ("🚫 بلاک شماره مزاحم",  "می‌خوام شماره 09999999999 رو برای خط 09121234567 بلاک کنم"),
-    ("📦 وضعیت سفارش",        "وضعیت سفارش ord002 چیه؟"),
-    ("📝 ثبت شکایت",          "می‌خوام شکایت ثبت کنم. شماره‌ام 09121234567 و صورتحسابم اشتباهه"),
-    ("⬆️ ارتقای طرح",        "می‌خوام طرحم رو از Silver به Gold ارتقا بدم. شماره‌ام 09351234567"),
-]
-
-cols = st.columns(4)
-for i, col in enumerate(cols):
-    with col:
-        lbl1, txt1 = examples[i * 2]
-        lbl2, txt2 = examples[i * 2 + 1]
-        if st.button(lbl1, use_container_width=True, key=f"ex_{i}a"):
-            st.session_state["_prefill"] = txt1
-        if st.button(lbl2, use_container_width=True, key=f"ex_{i}b"):
-            st.session_state["_prefill"] = txt2
-
-st.divider()
-
-# ──────────────────────────────────────────────
-# Chat History
-# ──────────────────────────────────────────────
 
 st.markdown("### 💬 Conversation")
 
@@ -287,41 +225,33 @@ for msg in st.session_state.messages:
             unsafe_allow_html=True,
         )
 
-# ──────────────────────────────────────────────
-# Input Form
-# ──────────────────────────────────────────────
-
 prefill = st.session_state.pop("_prefill", "")
 
 with st.form("chat_form", clear_on_submit=True):
     user_input = st.text_area(
         "message",
         value=prefill,
-        placeholder="درخواست خود را به فارسی یا انگلیسی بنویسید...",
+        placeholder="Send a request in Persian or English...",
         height=85,
         label_visibility="collapsed",
     )
-    submitted = st.form_submit_button("📤 ارسال", use_container_width=True)
-
-# ──────────────────────────────────────────────
-# Agent Processing
-# ──────────────────────────────────────────────
+    submitted = st.form_submit_button("📤 Send", use_container_width=True)
 
 if submitted and user_input.strip():
 
     if not st.session_state.api_ok:
-        st.error("❌ FastAPI در حال اجرا نیست.\n```\nuvicorn backend.main:app --reload\n```")
+        st.error("❌ FastAPI is not running.\n```\nuvicorn backend.main:app --reload\n```")
         st.stop()
     if not st.session_state.lm_ok:
-        st.error("❌ LM Studio در حال اجرا نیست. سرور رو روی پورت 1234 بالا بیار.")
+        st.error("❌ LM Studio is not running. Start the server on port 1234.")
         st.stop()
     if st.session_state.agent is None:
-        st.error("❌ Agent ساخته نشده — صفحه رو Refresh کن.")
+        st.error("❌ Agent is not created — Refresh the page.")
         st.stop()
 
     st.session_state.messages.append({"role": "user", "content": user_input.strip()})
 
-    with st.spinner("🤖 Agent در حال پردازش..."):
+    with st.spinner("🤖 Agent is processing..."):
         try:
             t0 = time.time()
             result = run_agent(
@@ -349,8 +279,8 @@ if submitted and user_input.strip():
         except Exception as e:
             err = str(e)
             if "Connection" in err or "refused" in err:
-                st.error("🔌 اتصال به FastAPI یا LM Studio قطع شد. سرویس‌ها رو چک کن.")
+                st.error("🔌 Connection to FastAPI or LM Studio was lost. Check the services.")
             else:
-                st.error(f"❌ خطا: {err}")
+                st.error(f"❌ Error: {err}")
 
     st.rerun()

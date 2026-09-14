@@ -1,24 +1,12 @@
-"""
-LangChain/LangGraph Agent — Telecom Call Center
-Compatible with: langchain >= 1.0, langgraph >= 1.0
-Each tool calls a real FastAPI endpoint.
-LLM: Qwen2.5-3B via LM Studio (OpenAI-compatible)
-"""
-
 import os
 import json
 import requests
 from typing import Optional
-
 from langgraph.prebuilt import create_react_agent
 from langgraph.checkpoint.memory import MemorySaver
 from langchain_openai import ChatOpenAI
 from langchain_core.tools import tool
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
-
-# ──────────────────────────────────────────────
-# Config
-# ──────────────────────────────────────────────
 
 API_BASE = os.getenv("API_BASE_URL",    "http://localhost:8000")
 LM_BASE  = os.getenv("LM_STUDIO_URL",  "http://localhost:1234/v1")
@@ -37,10 +25,6 @@ RULES:
 7. After using a tool, explain the result in simple friendly language."""
 
 
-# ──────────────────────────────────────────────
-# HTTP Helpers
-# ──────────────────────────────────────────────
-
 def _get(path: str, params: dict = None) -> dict:
     r = requests.get(f"{API_BASE}{path}", params=params, timeout=15)
     return r.json()
@@ -49,10 +33,6 @@ def _post(path: str, body: dict = None) -> dict:
     r = requests.post(f"{API_BASE}{path}", json=body or {}, timeout=15)
     return r.json()
 
-
-# ──────────────────────────────────────────────
-# Tools
-# ──────────────────────────────────────────────
 
 @tool
 def get_account_info(phone: str) -> str:
@@ -254,10 +234,6 @@ def reactivate_account(phone: str) -> str:
     return json.dumps(result, ensure_ascii=False)
 
 
-# ──────────────────────────────────────────────
-# All tools list
-# ──────────────────────────────────────────────
-
 ALL_TOOLS = [
     get_account_info,
     check_balance,
@@ -280,10 +256,6 @@ ALL_TOOLS = [
 ]
 
 
-# ──────────────────────────────────────────────
-# Build Agent
-# ──────────────────────────────────────────────
-
 def build_agent():
     """
     Build and return a LangGraph ReAct agent with memory.
@@ -291,7 +263,7 @@ def build_agent():
     """
     llm = ChatOpenAI(
         base_url=LM_BASE,
-        api_key="lm-studio",   # LM Studio doesn't need a real key
+        api_key="lm-studio", 
         model=LM_MODEL,
         temperature=0.2,
         max_tokens=1024,
@@ -324,14 +296,12 @@ def run_agent(agent, message: str, thread_id: str = "default") -> dict:
 
     all_messages = result.get("messages", [])
 
-    # Last AI message = final response
     response_text = ""
     for msg in reversed(all_messages):
         if isinstance(msg, AIMessage) and msg.content:
             response_text = msg.content
             break
 
-    # Extract tool calls from all messages
     tool_calls_used = []
     for msg in all_messages:
         if hasattr(msg, "tool_calls") and msg.tool_calls:
@@ -344,10 +314,6 @@ def run_agent(agent, message: str, thread_id: str = "default") -> dict:
         "tool_calls": tool_calls_used,
     }
 
-
-# ──────────────────────────────────────────────
-# Health Checks
-# ──────────────────────────────────────────────
 
 def check_api_health() -> bool:
     """Check if FastAPI backend is running."""
